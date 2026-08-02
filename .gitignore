@@ -1,0 +1,15 @@
+# dependencies & builds
+node_modules/
+.next/
+target/
+*.tar.gz
+*.log
+
+# environment & server configs
+.env*
+application-prod.properties
+savelya.co.conf
+clean_rebuild_vps.py
+deploy_fresh_frontend.py
+deploy_to_vps.py
+finish_vps_deploy.py

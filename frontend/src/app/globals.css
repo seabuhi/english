@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --emerald-primary: #10b981;
+  --emerald-dark: #059669;
+  --emerald-hover: #047857;
+  --slate-heading: #0f172a;
+  --slate-body: #334155;
+  --slate-light-bg: #f8fafc;
+  --slate-border: #e2e8f0;
+}
+
+body {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* Emerald Signature Dot Matrix Pattern */
+.bg-emerald-dots-light {
+  background-image: radial-gradient(rgba(16, 185, 129, 0.14) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* Emerald Light Grid Pattern */
+.bg-emerald-grid-light {
+  background-image: 
+    linear-gradient(to right, rgba(16, 185, 129, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Hero Ambient Emerald Gradient */
+.bg-emerald-hero-light {
+  background: radial-gradient(circle at 50% 0%, #ecfdf5 0%, #f8fafc 60%, #ffffff 100%);
+}
+
+/* Custom Scrollbar Clean Emerald Style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid #f8fafc;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
+  color: #059669;
+}
+
+
+
+
