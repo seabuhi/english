@@ -91,12 +91,122 @@ const levelDetails: LevelDetail[] = [
   }
 ];
 
+interface DemoQuestion {
+  level: string;
+  category: string;
+  question: string;
+  options: { id: number; text: string; correct: boolean }[];
+  explanation: string;
+}
+
+const DEMO_QUESTIONS: DemoQuestion[] = [
+  {
+    level: 'A2',
+    category: 'Grammar',
+    question: 'She ______ to London twice last year for business conferences.',
+    options: [
+      { id: 0, text: 'traveled', correct: true },
+      { id: 1, text: 'travels', correct: false },
+      { id: 2, text: 'has traveled', correct: false },
+      { id: 3, text: 'is traveling', correct: false }
+    ],
+    explanation: '"Traveled" is the correct Past Simple verb form used for completed past actions.'
+  },
+  {
+    level: 'B1',
+    category: 'Vocabulary',
+    question: 'If you work hard, you will definitely ______ your long-term goals.',
+    options: [
+      { id: 0, text: 'achieve', correct: true },
+      { id: 1, text: 'abandon', correct: false },
+      { id: 2, text: 'postpone', correct: false },
+      { id: 3, text: 'ignore', correct: false }
+    ],
+    explanation: '"Achieve" means to successfully bring about a desired result through effort.'
+  },
+  {
+    level: 'B2',
+    category: 'Vocabulary',
+    question: 'The CEO delivered an ______ presentation that persuaded all key investors.',
+    options: [
+      { id: 0, text: 'articulate', correct: true },
+      { id: 1, text: 'hesitant', correct: false },
+      { id: 2, text: 'ambiguous', correct: false },
+      { id: 3, text: 'superficial', correct: false }
+    ],
+    explanation: '"Articulate" means expressing ideas fluently and coherently in speech.'
+  },
+  {
+    level: 'B2',
+    category: 'Grammar',
+    question: 'Had I known about the flight delay, I ______ at the hotel longer.',
+    options: [
+      { id: 0, text: 'would have stayed', correct: true },
+      { id: 1, text: 'will stay', correct: false },
+      { id: 2, text: 'stayed', correct: false },
+      { id: 3, text: 'have stayed', correct: false }
+    ],
+    explanation: '"Would have stayed" forms the inverted third conditional for hypothetical past actions.'
+  },
+  {
+    level: 'C1',
+    category: 'Synonyms',
+    question: 'Choose the closest synonym for the word "meticulous":',
+    options: [
+      { id: 0, text: 'painstaking', correct: true },
+      { id: 1, text: 'careless', correct: false },
+      { id: 2, text: 'hasty', correct: false },
+      { id: 3, text: 'vague', correct: false }
+    ],
+    explanation: '"Painstaking" and "meticulous" both describe showing great care and thorough attention to detail.'
+  },
+  {
+    level: 'C2',
+    category: 'Mastery',
+    question: 'Not until the audit concluded ______ the discrepancies in the financial report.',
+    options: [
+      { id: 0, text: 'did they discover', correct: true },
+      { id: 1, text: 'they discovered', correct: false },
+      { id: 2, text: 'they have discovered', correct: false },
+      { id: 3, text: 'were discovered', correct: false }
+    ],
+    explanation: 'Negative adverbials like "Not until" require subject-auxiliary inversion ("did they discover").'
+  }
+];
+
 export default function HomePage() {
   const [activeLevel, setActiveLevel] = useState<CefrLevel>('B2');
+  const [demoIndex, setDemoIndex] = useState<number>(0);
   const [heroOptionSelected, setHeroOptionSelected] = useState<number | null>(null);
   const [heroSubmitted, setHeroSubmitted] = useState(false);
 
+  React.useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * DEMO_QUESTIONS.length);
+    setDemoIndex(randomIndex);
+  }, []);
+
+  const currentDemo = DEMO_QUESTIONS[demoIndex] || DEMO_QUESTIONS[2];
   const activeDetail = levelDetails.find((l) => l.level === activeLevel) || levelDetails[3];
+
+  const handleNextDemo = () => {
+    setHeroOptionSelected(null);
+    setHeroSubmitted(false);
+    setDemoIndex((prev) => (prev + 1) % DEMO_QUESTIONS.length);
+  };
+
+  const handleHeroSubmit = () => {
+    if (heroOptionSelected === null) return;
+    setHeroSubmitted(true);
+
+    const chosenOption = currentDemo.options.find((o) => o.id === heroOptionSelected);
+    if (chosenOption && chosenOption.correct) {
+      const currentScore = parseInt(localStorage.getItem('user_score') || '0', 10);
+      const currentStreak = parseInt(localStorage.getItem('user_streak') || '1', 10);
+      localStorage.setItem('user_score', (currentScore + 10).toString());
+      localStorage.setItem('user_streak', currentStreak.toString());
+      window.dispatchEvent(new Event('storage'));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans relative selection:bg-emerald-500/20 selection:text-emerald-700">
@@ -166,7 +276,7 @@ export default function HomePage() {
 
             </div>
 
-            {/* Right Column: Clean White Interactive Trial Card */}
+            {/* Right Column: Dynamic Interactive Demo Card */}
             <div className="lg:col-span-5">
               <div className="relative bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xl shadow-slate-900/5 space-y-5">
                 
@@ -177,26 +287,21 @@ export default function HomePage() {
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Live Interactive Demo</span>
                   </div>
                   <span className="text-[11px] font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    B2 Vocabulary
+                    {currentDemo.level} {currentDemo.category}
                   </span>
                 </div>
 
                 {/* Question */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-slate-500">Choose the word that best completes the sentence:</p>
+                  <p className="text-xs font-semibold text-slate-500">Choose the best answer:</p>
                   <p className="text-sm sm:text-base font-semibold text-slate-900 leading-snug">
-                    &ldquo;The CEO delivered an <span className="underline decoration-[#059669] underline-offset-4 font-bold text-[#059669]">______</span> presentation that persuaded all key investors.&rdquo;
+                    {currentDemo.question}
                   </p>
                 </div>
 
                 {/* Radio Options */}
                 <div className="space-y-2 pt-1">
-                  {[
-                    { id: 0, text: 'articulate', correct: true },
-                    { id: 1, text: 'hesitant', correct: false },
-                    { id: 2, text: 'ambiguous', correct: false },
-                    { id: 3, text: 'superficial', correct: false },
-                  ].map((opt) => {
+                  {currentDemo.options.map((opt) => {
                     const isSelected = heroOptionSelected === opt.id;
                     let style = 'bg-slate-50 border-slate-200 text-slate-700 hover:border-[#059669] hover:bg-white';
 
@@ -232,21 +337,36 @@ export default function HomePage() {
                     <button
                       type="button"
                       disabled={heroOptionSelected === null}
-                      onClick={() => setHeroSubmitted(true)}
+                      onClick={handleHeroSubmit}
                       className="w-full py-3.5 rounded-xl bg-[#059669] hover:bg-[#047857] disabled:opacity-40 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-2"
                     >
                       <span>Submit Answer</span>
                       <Zap className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1.5">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                        <span>Explanation (+10 pts)</span>
+                    <div className="space-y-3">
+                      <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <span>
+                            {currentDemo.options.find((o) => o.id === heroOptionSelected)?.correct
+                              ? 'Correct! (+10 pts / XP Added)'
+                              : 'Incorrect Answer'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-700 leading-relaxed font-normal">
+                          {currentDemo.explanation}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-slate-700 leading-relaxed font-normal">
-                        <strong>Articulate</strong> means expressing ideas fluently and coherently in speech.
-                      </p>
+
+                      <button
+                        type="button"
+                        onClick={handleNextDemo}
+                        className="w-full py-3 rounded-xl bg-slate-900 hover:bg-[#059669] text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+                      >
+                        <span>Try Another Question</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   )}
                 </div>

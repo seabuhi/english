@@ -97,15 +97,15 @@ export default function Navbar() {
           <div className="flex items-center gap-2.5">
             
             {/* Score & Streak Counters */}
-            <div className="hidden sm:flex items-center gap-2.5 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700">
+            <div className="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 shadow-xs">
               <div className="flex items-center gap-1.5 text-amber-600" title="Score Points">
-                <Trophy className="w-3.5 h-3.5" />
-                <span className="text-slate-900">{score} <span className="text-slate-500 font-normal text-[11px]">pts</span></span>
+                <Trophy className="w-3.5 h-3.5 text-amber-500 fill-amber-400/30" />
+                <span className="text-slate-900 font-extrabold">{score} <span className="text-slate-500 font-normal text-[11px]">pts</span></span>
               </div>
               <div className="w-px h-3.5 bg-slate-300" />
               <div className="flex items-center gap-1.5 text-orange-600" title="Streak Days">
-                <Flame className="w-3.5 h-3.5" />
-                <span className="text-slate-900">{streak} <span className="text-slate-500 font-normal text-[11px]">d</span></span>
+                <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-400/30" />
+                <span className="text-slate-900 font-extrabold">{streak} <span className="text-slate-500 font-normal text-[11px]">d</span></span>
               </div>
             </div>
 
